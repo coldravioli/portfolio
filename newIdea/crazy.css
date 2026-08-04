@@ -1,0 +1,396 @@
+/* =========================
+   RESET
+========================= */
+
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+
+html,
+body {
+
+    width: 100%;
+    height: 100%;
+
+}
+
+
+
+body {
+
+    overflow: hidden;
+
+    background: white;
+
+    font-family:
+    Arial, Helvetica, sans-serif;
+
+}
+
+
+
+/* =========================
+   PAGE TRANSITION
+========================= */
+
+
+body {
+
+    opacity: 1;
+
+    transition:
+    opacity .8s ease;
+
+}
+
+
+
+body.fade {
+
+    opacity: 0;
+
+}
+
+
+
+/* =========================
+   LANDING CONTAINER
+   tank + menu together
+   centered as one group
+========================= */
+
+
+.landing-container {
+
+    width: 100vw;
+
+    height: 100vh;
+
+
+    display: flex;
+
+
+    align-items: center;
+
+
+    justify-content: center;
+
+
+    /*
+    controls space between
+    tank and menu
+    */
+
+    gap: 1vw;
+
+}
+
+
+
+
+
+/* =========================
+   AQUARIUM
+========================= */
+
+
+.tank-container {
+
+    position: relative;
+
+
+    /*
+    tank height matches menu
+    */
+
+    height: 55vh;
+
+
+    aspect-ratio: 1 / 1;
+
+
+    flex-shrink: 0;
+
+}
+
+
+
+.tank {
+
+    width: 100%;
+
+    height: 100%;
+
+
+    object-fit: contain;
+
+
+    display: block;
+
+}
+
+
+
+/* fish overlays */
+
+
+.fish {
+
+    position: absolute;
+
+
+    inset: 0;
+
+
+    width: 100%;
+
+
+    height: 100%;
+
+
+    object-fit: contain;
+
+
+    opacity: 0;
+
+
+    transition:
+    opacity .6s ease;
+
+
+    pointer-events: none;
+
+}
+
+
+
+
+
+/* =========================
+   MENU
+========================= */
+
+
+.landing-menu {
+
+
+    display: flex;
+
+
+    flex-direction: column;
+
+
+    justify-content: center;
+
+
+    gap: 1.5rem;
+
+
+}
+
+
+
+
+.landing-menu a {
+
+
+    font-size:
+    clamp(3rem, 5vw, 7rem);
+
+
+    line-height: .8;
+
+
+    font-weight: 500;
+
+
+    letter-spacing: -.06em;
+
+
+    text-transform: lowercase;
+
+
+    text-decoration: none;
+
+
+    color: black;
+
+
+    transition:
+
+    color .35s ease,
+
+    transform .35s ease,
+
+    opacity .35s ease;
+
+
+}
+
+
+
+
+/* movement */
+
+
+.landing-menu a:hover {
+
+
+    transform:
+    translateX(20px);
+
+
+}
+
+
+
+
+
+/* =========================
+   HOVER COLORS
+========================= */
+
+
+.landing-menu a:nth-child(1):hover {
+
+    color: #ff5c8a;
+
+}
+
+
+
+.landing-menu a:nth-child(2):hover {
+
+    color: #35c9c1;
+
+}
+
+
+
+.landing-menu a:nth-child(3):hover {
+
+    color: #ffcc4d;
+
+}
+
+
+
+.landing-menu a:nth-child(4):hover {
+
+    color: #9b5de5;
+
+}
+
+
+
+
+
+/* fade inactive menu items */
+
+
+.landing-menu:hover a {
+
+    opacity: .35;
+
+}
+
+
+
+.landing-menu a:hover {
+
+    opacity: 1;
+
+}
+
+
+
+
+
+/* =========================
+   OPTIONAL:
+   Pull menu slightly closer
+========================= */
+
+
+.landing-menu {
+
+    transform:
+    translateX(-1vw);
+
+}
+
+
+
+
+
+
+/* =========================
+   MOBILE
+========================= */
+
+
+@media(max-width:900px) {
+
+
+    body {
+
+        overflow:auto;
+
+    }
+
+
+
+    .landing-container {
+
+
+        flex-direction: column;
+
+
+        gap: 2rem;
+
+
+    }
+
+
+
+    .tank-container {
+
+
+        height:40vh;
+
+
+    }
+
+
+
+    .landing-menu {
+
+
+        align-items:center;
+
+
+        transform:none;
+
+
+    }
+
+
+
+    .landing-menu a {
+
+
+        font-size:
+        clamp(2.5rem,12vw,5rem);
+
+
+    }
+
+
+}

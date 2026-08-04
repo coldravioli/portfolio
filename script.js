@@ -345,3 +345,26 @@ function typeWriter() {
 
 
 typeWriter();
+
+document.querySelectorAll(".resume-description").forEach(link => {
+    const preview = link.querySelector(".pdf-preview");
+
+    if (!preview) return;
+
+    link.addEventListener("mouseenter", () => {
+        preview.style.opacity = "1";
+        preview.style.visibility = "visible";
+    });
+
+    link.addEventListener("mouseleave", () => {
+        preview.style.opacity = "0";
+        preview.style.visibility = "hidden";
+    });
+
+    link.addEventListener("mousemove", (e) => {
+        const rect = preview.getBoundingClientRect();
+
+        preview.style.left = (e.clientX - rect.width / 2) + "px";
+        preview.style.top = (e.clientY - rect.height / 2) + "px";
+    });
+});
