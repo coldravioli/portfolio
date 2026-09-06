@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Realistic Aquascape Portfolio with Running Water</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: #000;
+      color: #e2f1f8;
+    }
+
+    /* --- OUTER TANK FRAME --- */
+    .viewport {
+      position: relative;
+      width: 100vw;
+      height: calc(100vh - 44px);
+      background: #020508;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .tank-frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-top: 18px solid #111417;
+      border-left: 8px solid #0a0c0f;
+      border-right: 8px solid #0a0c0f;
+      background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center bottom;
+      overflow: hidden;
+    }
+
+    /* Water Depth & Lighting Overlays */
+    .tank-water-tint {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 10%, rgba(21, 51, 61, 0.4) 0%, rgba(9, 26, 36, 0.7) 60%, rgba(2, 9, 14, 0.9) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .light-rays {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60%;
+      background: linear-gradient(180deg, rgba(160, 230, 255, 0.15) 0%, rgba(100, 200, 255, 0.05) 40%, transparent 100%);
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* --- RUNNING WATER EFFECTS --- */
+    /* Rippling surface line */
+    .water-surface {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 12px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.15) 15%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.15) 85%, transparent 100%);
+      filter: blur(2px);
+      animation: surfaceRipples 3s ease-in-out infinite alternate;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* Filter outflow cascading down */
+    .filter-outflow {
+      position: absolute;
+      top: 0;
+      left: 15%; /* Positioned on the left */
+      width: 60px;
+      height: 35%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.2) 0%, rgba(160,230,255,0.1) 40%, transparent 100%);
+      filter: blur(4px);
+      mask-image: linear-gradient(180deg, black, transparent);
+      -webkit-mask-image: linear-gradient(180deg, black, transparent);
+      animation: pourWater 0.8s linear infinite;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    @keyframes surfaceRipples {
+      0% { transform: translateY(-2px) scaleX(1); opacity: 0.6; }
+      100% { transform: translateY(2px) scaleX(1.02); opacity: 0.9; }
+    }
+
+    @keyframes pourWater {
+      0% { background-position: 0 -100px; opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { background-position: 0 100px; opacity: 0.6; }
+    }
+
+    /* --- ANIMATED BUBBLES --- */
+    .bubbles-container {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -10px;
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      animation: rise linear infinite;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(0) scale(0.5); opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-95vh) scale(1.2); opacity: 0; }
+    }
+
+    /* --- REALISTIC CREATURES (INTERACTIVE) --- */
+    .tank-object {
+      position: absolute;
+      cursor: pointer;
+      user-select: none;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      transition: filter 0.3s ease;
+    }
+
+    .tank-object img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 15px 15px rgba(0, 0, 0, 0.7)) brightness(0.9);
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+
+    .tank-object:hover img {
+      filter: drop-shadow(0 0 20px rgba(138, 222, 255, 0.6)) brightness(1.1);
+    }
+
+    /* Hover Callout HUD */
+    .hud-callout {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+      pointer-events: none;
+      font-family: 'Segoe UI', monospace;
+      font-size: 0.9rem;
+      color: #aee4ff;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .tank-object:hover .hud-callout {
+      opacity: 1;
+      color: #ffffff;
+    }
+
+    .callout-line {
+      height: 1px;
+      width: 50px;
+      background: rgba(174, 228, 255, 0.6);
+      position: relative;
+    }
+
+    .callout-line::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: -3px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #aee4ff;
+      box-shadow: 0 0 8px rgba(174, 228, 255, 0.8);
+    }
+
+    /* Positions & Physics */
+    .seahorse { top: 30%; left: 25%; width: 90px; animation: floatSeahorse 4s ease-in-out infinite alternate; }
+    .seahorse .hud-callout { left: 80px; top: 20px; }
+
+    .discus { top: 40%; right: 22%; width: 150px; animation: swimDiscus 6s ease-in-out infinite alternate; }
+    .discus .hud-callout { right: 140px; top: 30px; flex-direction: row-reverse; }
+    .discus .hud-callout .callout-line::before { left: auto; right: 0; }
+
+    .starfish { bottom: 60px; right: 45%; width: 100px; animation: restStarfish 8s ease-in-out infinite alternate; }
+    .starfish .hud-callout { left: 90px; bottom: 60px; }
+
+    .clam { bottom: 40px; right: 28%; width: 130px; animation: restClam 6s ease-in-out infinite alternate; }
+    .clam .hud-callout { right: 120px; bottom: 60px; flex-direction: row-reverse; }
+    .clam .hud-callout .callout-line::before { left: auto; right: 0; }
+
+    @keyframes floatSeahorse { 0% { transform: translateY(0px) rotate(-2deg); } 100% { transform: translateY(-12px) rotate(2deg); } }
+    @keyframes swimDiscus { 0% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-15px, -5px) rotate(-1deg); } 100% { transform: translate(10px, 5px) rotate(1deg); } }
+    @keyframes restStarfish { 0% { transform: scale(1) rotate(0deg); } 100% { transform: scale(1.02) rotate(1deg); } }
+    @keyframes restClam { 0% { transform: translateY(0); } 100% { transform: translateY(-2px); } }
+
+    /* --- FROSTED GLASS DRAWER --- */
+    .drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 40;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .project-drawer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 400px;
+      max-width: 85vw;
+      height: 100%;
+      background: rgba(14, 28, 38, 0.55);
+      backdrop-filter: blur(25px) saturate(140%);
+      -webkit-backdrop-filter: blur(25px) saturate(140%);
+      border-left: 1px solid rgba(160, 230, 255, 0.15);
+      box-shadow: -20px 0 50px rgba(0, 0, 0, 0.8);
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      padding: 40px 32px;
+    }
+
+    .project-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(160, 230, 255, 0.1);
+      padding-bottom: 16px;
+    }
+
+    .drawer-title {
+      font-size: 1.5rem;
+      color: #c9f2ff;
+      font-weight: 400;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #638c9e;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s ease;
+    }
+
+    .close-btn:hover { color: #fff; }
+
+    .drawer-body {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #8db5c8;
+    }
+
+    /* --- BOTTOM STATUS BAR --- */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 44px;
+      background: #040608;
+      border-top: 1px solid #14181c;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 32px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: #618293;
+      z-index: 60;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="viewport">
+    <div class="tank-frame">
+      <div class="tank-water-tint"></div>
+      <div class="light-rays"></div>
+      
+      <!-- RUNNING WATER ELEMENTS -->
+      <div class="water-surface"></div>
+      <div class="filter-outflow"></div>
+
+      <!-- BUBBLES CONTAINER -->
+      <div class="bubbles-container" id="bubblesContainer"></div>
+
+      <!-- REPLACE IMG SRCS WITH YOUR AI-GENERATED ASSETS -->
+      <!-- SEAHORSE -->
+      <div class="tank-object seahorse" data-title="CoralReef.AI" data-desc="Real-time ocean biodiversity monitoring and predictive coral bleaching models.">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Hippocampus_guttulatus.png/200px-Hippocampus_guttulatus.png" alt="Seahorse" />
+        <div class="hud-callout">
+          <div class="callout-line"></div>
+          <span>Project: CoralReef.AI</span>
+        </div>
+      </div>
+
+      <!-- DISCUS FISH -->
+      <div class="tank-object discus" data-title="AquascapeUI" data-desc="A sleek component library designed for automated aquarium hardware controllers.">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Symphysodon_discus_red.png/320px-Symphysodon_discus_red.png" alt="Discus Fish" />
+        <div class="hud-callout">
+          <div class="callout-line"></div>
+          <span>Project: AquascapeUI</span>
+        </div>
+      </div>
+
+      <!-- STARFISH -->
+      <div class="tank-object starfish" data-title="Starfall Engine" data-desc="A custom WebGL rendering engine for lightweight browser physics.">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Asterias_rubens_transparent.png/200px-Asterias_rubens_transparent.png" alt="Starfish" />
+        <div class="hud-callout">
+          <div class="callout-line"></div>
+          <span>Project: Starfall Engine</span>
+        </div>
+      </div>
+
+      <!-- CLAM -->
+      <div class="tank-object clam" data-title="BlueOcean Database" data-desc="An encrypted, decentralized archival storage node.">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Tridacna_gigas_transparent.png/320px-Tridacna_gigas_transparent.png" alt="Clam" />
+        <div class="hud-callout">
+          <div class="callout-line"></div>
+          <span>Project: BlueOcean Database</span>
+        </div>
+      </div>
+
+      <!-- SIDEBAR DRAWER -->
+      <div class="drawer-backdrop" id="drawerBackdrop"></div>
+      <aside class="project-drawer" id="projectDrawer">
+        <div class="drawer-header">
+          <h2 class="drawer-title" id="drawerTitle">Project Details</h2>
+          <button class="close-btn" id="closeDrawer">&times;</button>
+        </div>
+        <div class="drawer-body">
+          <p id="drawerDesc">Select an item in the aquarium to reveal project information.</p>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <footer class="bottom-bar">
+    <span>HAND-CODED WITH HTML/CSS/JS (VERSION 3.0)</span>
+    <span>LAST UPDATED: AUGUST 2026</span>
+  </footer>
+
+  <script>
+    const container = document.getElementById('bubblesContainer');
+    
+    // 1. Ambient Background Bubbles (Slow & Spread out)
+    for (let i = 0; i < 20; i++) {
+      createBubble(Math.random() * 90 + 5, Math.random() * 5 + 3, Math.random() * 8 + 6, Math.random() * 5);
+    }
+
+    // 2. Filter Outflow Bubbles (Fast, concentrated under the running water at left: 15%)
+    for (let i = 0; i < 35; i++) {
+      // Concentrate bubbles near the 15% mark horizontally
+      const filterX = 15 + (Math.random() * 6 - 3); 
+      createBubble(filterX, Math.random() * 3 + 1.5, Math.random() * 3 + 2, Math.random() * 3);
+    }
+
+    function createBubble(leftPos, size, duration, delay) {
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+      bubble.style.left = `${leftPos}%`;
+      bubble.style.animationDuration = `${duration}s`;
+      bubble.style.animationDelay = `${delay}s`;
+      container.appendChild(bubble);
+    }
+
+    // Drawer Logic
+    const tankObjects = document.querySelectorAll('.tank-object');
+    const drawer = document.getElementById('projectDrawer');
+    const backdrop = document.getElementById('drawerBackdrop');
+    
+    tankObjects.forEach(obj => {
+      obj.addEventListener('click', () => {
+        document.getElementById('drawerTitle').textContent = obj.getAttribute('data-title');
+        document.getElementById('drawerDesc').textContent = obj.getAttribute('data-desc');
+        drawer.classList.add('open');
+        backdrop.classList.add('open');
+      });
+    });
+
+    const closeAll = () => {
+      drawer.classList.remove('open');
+      backdrop.classList.remove('open');
+    };
+
+    document.getElementById('closeDrawer').addEventListener('click', closeAll);
+    backdrop.addEventListener('click', closeAll);
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && closeAll());
+  </script>
+</body>
+</html>

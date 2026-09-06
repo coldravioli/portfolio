@@ -371,6 +371,10 @@ body::before {
 
 }
 
+a:hover {
+    cursor: url("images/cursor2.png"), default;
+}
+
 .links a:hover {
     color: #acbed1;
     text-decoration: underline;
