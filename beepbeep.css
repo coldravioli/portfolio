@@ -28,6 +28,14 @@
 }
 
 @font-face {
+    font-family: "RayaHandwriting";
+    src: url("RayaHandwriting-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+@font-face {
     font-family:"scandia-line-web-med";
     src:url("https://use.typekit.net/af/9ed838/00000000000000007735db08/31/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff2"),url("https://use.typekit.net/af/9ed838/00000000000000007735db08/31/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff"),url("https://use.typekit.net/af/9ed838/00000000000000007735db08/31/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("opentype");
     font-display:auto;font-style:normal;font-weight:700;font-stretch:normal;
@@ -145,6 +153,8 @@
 
 html, body {
     cursor: url("images/cursor.png"), default;
+      scroll-behavior: smooth;
+
 }
 
 body {
@@ -157,6 +167,7 @@ body {
     height: 100%;
     padding-left: 2rem;
     padding-right: 2rem;
+    color: rgb(60, 83, 105);
 
 }
 
@@ -254,7 +265,7 @@ body::before {
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     font-size: .75rem;
-    color: #333;
+    color: rgb(60, 83, 105);
     margin-bottom: 2rem;
 }
 
@@ -272,8 +283,8 @@ body::before {
 }
 
 .internal-grid div {
-    border-right: 1px solid rgba(0,0,0,0.05);
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-right: 1px solid rgb(60, 83, 105);
+    border-bottom: 1px solid rgb(60, 83, 105);
 }
 
 .caption {
@@ -311,7 +322,7 @@ body::before {
     font-size: .9rem;
     font-weight: normal;
     flex: 0 0 40%; 
-    color: #333;
+    color: rgb(60, 83, 105);
     text-align: left;
 }
 
@@ -333,11 +344,18 @@ body::before {
 .resume-description {
     font-size: 0.76rem;
     line-height: 1;
-    color: #666;
+    color: rgb(60, 83, 105);
     margin-top: 0.4rem;
 
     position:relative;
     display:inline-block;
+}
+
+.resume-description a:hover {
+    color: #acbed1 !important;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.25s ease;
 }
 
 .pdf-preview{
@@ -356,6 +374,7 @@ body::before {
     opacity:1;
     visibility:visible;
     transform:translateY(-50%) scale(1);
+    
 }
 
 .links {
@@ -376,20 +395,20 @@ a:hover {
 }
 
 .links a:hover {
-    color: #acbed1;
+    color: #acbed1 !important;
     text-decoration: underline;
     text-underline-offset: 2px;
 }
 
 hr {
     border: 0;
-    border-top: 1px solid #323232;
+    border-top: 1px solid  rgb(60, 83, 105);
     margin: 2rem 0;
 }
 
 .right-pane hr {
     border: 0;
-    border-top: 1px solid #323232;
+    border-top: 1px solid rgb(60, 83, 105);
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
@@ -420,7 +439,7 @@ b {
 .project-header {
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid #1a1a1a;
+    border-bottom: 1px solid rgb(60, 83, 105);
 }
 
 .project-header h3 {
@@ -435,7 +454,7 @@ b {
 
 .project-header p {
     font-size: 0.85rem;
-    color: #666;
+    color: rgb(60, 83, 105)666;
     margin-bottom: .25rem;
 }
 
@@ -488,7 +507,7 @@ b {
     position: relative;
     overflow: hidden;
     background: #ffffff;
-    border: 1px solid #323232;
+    border: 1px solid rgb(60, 83, 105);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -520,7 +539,7 @@ b {
     aspect-ratio: 1 / 1;
     object-fit: contain;
     box-sizing: border-box;
-    border: 1px solid #323232;
+    border: 1px solid rgb(60, 83, 105);
     cursor: url("images/cursor2.png");
     transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 
@@ -573,7 +592,7 @@ b {
     }
     
     .right-pane {
-        border-top: 1px solid #1a1a1a;
+        border-top: 1px solid rgb(60, 83, 105);
     }
 }
 
@@ -588,7 +607,7 @@ b {
 }
 
 .filter {
-    border: 1px solid #323232;
+    border: 1px solid rgb(60, 83, 105);
     padding: 1rem;
     cursor: url("images/cursor2.png"), default;
     transition: 0.2s ease;
@@ -605,7 +624,7 @@ b {
 }
 
 .intro-col.active {
-    border: 1px solid #000;
+    border: 1px solid rgb(60, 83, 105);
     background: rgba(0,0,0,0.03);
     transition: all 0.2s ease;
 }
@@ -682,7 +701,7 @@ b {
     width: 100%;
     aspect-ratio: 1 / 1;
     box-sizing: border-box;
-    border: 1px solid #323232;
+    border: 1px solid rgb(60, 83, 105);
     cursor: url("images/cursor2.png"), default;
     overflow: hidden; /* Cleans up loose edges */
     background: #ffffff; /* Gives videos the same default canvas backing as images */
@@ -749,3 +768,19 @@ b {
     transform: translateY(0);
     opacity: 1;
 }
+
+/* Code for Chrome, Safari, Edge, and Opera */
+::selection {
+    background-color: #acbed1;
+    color: rgb(255, 255, 255);
+  }
+  
+  /* Code for Firefox */
+  ::-moz-selection {
+    background-color: #acbed1;
+    color: white;
+  }
+
+  b::selection {
+    color: rgb(60, 83, 105);
+  }
