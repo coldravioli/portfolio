@@ -998,8 +998,15 @@ rainbow words */
   border-top:
     1px solid var(--blue);
 
+  /* Consistent spacing around the section */
   padding-top:
-    20px;
+    45px;
+
+  padding-bottom:
+    0;
+
+  margin-bottom:
+    0;
 
 }
 
@@ -1018,7 +1025,7 @@ rainbow words */
 .about-column h3 {
 
   margin:
-    0 0 35px;
+    0 0 20px;
 
   font-family:
     "Courier New",
@@ -1142,7 +1149,7 @@ rainbow words */
       repeat(2, minmax(0, 1fr));
 
     row-gap:
-      70px;
+      40px;
 
   }
 
@@ -1164,7 +1171,7 @@ rainbow words */
       70px;
 
     margin-bottom:
-      80px;
+      40px;
 
   }
 
@@ -1180,6 +1187,9 @@ rainbow words */
     grid-template-columns:
       1fr;
 
+    row-gap:
+      30px;
+
   }
 
   .about-employment {
@@ -1191,181 +1201,249 @@ rainbow words */
 
 }
 
-    /* =========================================================
-       PROJECTS
-    ========================================================== */
-
-    .projects-grid {
-      display: grid;
-
-      grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-      gap:
-        clamp(45px, 7vw, 110px);
-    }
-
-    .project {
-      color: var(--blue);
-
-      text-decoration:
-        none;
-
-      cursor:
-        pointer;
-
-      transition:
-        transform .55s var(--ease);
-    }
-
-    .project:hover {
-      transform:
-        translateY(-6px);
-    }
-
-    .project-image {
-      position: relative;
-
-      width: 100%;
-
-      aspect-ratio:
-        4 / 3;
-
-      margin-bottom:
-        18px;
-
-      overflow:
-        hidden;
-
-      background:
-        #f1f1f1;
-    }
-
-    .project-image img {
-      width: 100%;
-      height: 100%;
-
-      display: block;
-
-      object-fit: cover;
-
-      filter:
-        blur(9px)
-        contrast(1.18);
-
-      transform:
-        scale(1.07);
-
-      transition:
-        filter 1.1s var(--ease),
-        transform .9s var(--ease);
-    }
-
-    .project-image img.resolved {
-      filter:
-        blur(0)
-        contrast(1);
-    }
-
-    .project:hover
-    .project-image img {
-      transform:
-        scale(1.045);
-    }
 
 
-    /* =========================================================
-       CRYPTIC PROJECT LABEL
-    ========================================================== */
+/* =========================================================
+   PROJECTS GRID
+========================================================= */
 
-    .project-image::after {
-      content:
-        attr(data-cryptic);
+.projects-grid {
+  display: grid;
 
-      position: absolute;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
 
-      left: 18px;
-      bottom: 15px;
+  gap:
+    clamp(45px, 7vw, 110px);
+}
 
-      z-index: 5;
 
-      padding:
-        5px 8px;
+/* =========================================================
+   PROJECT
+========================================================= */
 
-      background:
-        rgba(244, 239, 93, .78);
+.project {
+  color: var(--blue);
 
-      color:
-        var(--blue);
+  text-decoration: none;
+  cursor: pointer;
 
-      font-family:
-        "Courier New",
-        Courier,
-        monospace;
+  transition:
+    transform .55s var(--ease);
+}
 
-      font-size:
-        .7rem;
+.project:hover {
+  transform: translateY(-6px);
+}
 
-      text-transform:
-        uppercase;
 
-      letter-spacing:
-        .05em;
+/* =========================================================
+   PROJECT IMAGE CONTAINER
+========================================================= */
 
-      opacity: 0;
+.project-image {
+  position: relative;
+  isolation: isolate;
 
-      transform:
-        translateY(7px);
+  width: 100%;
+  aspect-ratio: 4 / 3;
 
-      pointer-events:
-        none;
+  margin-bottom: 18px;
 
-      transition:
-        opacity .25s ease,
-        transform .35s var(--ease);
-    }
+  overflow: hidden;
 
-    .project:hover
-    .project-image::after {
-      opacity: 1;
+  background: #f1f1f1;
+}
 
-      transform:
-        translateY(0);
-    }
 
-    .project-info {
-      display: flex;
+/* =========================================================
+   PROJECT IMAGE
+========================================================= */
 
-      justify-content:
-        space-between;
+.project-image img {
+  position: absolute;
+  inset: 0;
 
-      align-items:
-        baseline;
+  width: 100%;
+  height: 100%;
 
-      gap:
-        20px;
+  display: block;
 
-      font-family:
-        "Courier New",
-        Courier,
-        monospace;
+  object-fit: cover;
 
-      font-size:
-        .8rem;
+  filter:
+    blur(9px)
+    contrast(1.18);
 
-      text-transform:
-        uppercase;
-    }
+  transform: scale(1.07);
 
-    .project-title {
-      font-weight:
-        700;
-    }
+  transition:
+    filter 1.1s var(--ease),
+    transform .9s var(--ease);
+}
 
-    .project-number {
-      opacity:
-        .65;
-    }
+
+/* RESOLVED IMAGE */
+
+.project-image img.resolved {
+  filter:
+    blur(0)
+    contrast(1);
+}
+
+
+/* IMAGE HOVER SCALE */
+
+.project:hover .project-image img {
+  transform: scale(1.045);
+}
+
+
+/* =========================================================
+   FULL-IMAGE YELLOW OVERLAY
+========================================================= */
+
+.project-image::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 2;
+
+  background: var(--yellow);
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition:
+    opacity .35s var(--ease);
+
+  mix-blend-mode: multiply;
+}
+
+
+/* SHOW YELLOW OVERLAY */
+
+.project:hover .project-image::before {
+  opacity: 1;
+}
+
+
+
+/* =========================================================
+   CRYPTIC PROJECT LABEL
+========================================================= */
+
+.project-image::after {
+  content: attr(data-cryptic);
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 5;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  /* TYPOGRAPHY */
+
+  font-family:
+    "navigo",
+    sans-serif;
+
+  font-size:
+    clamp(1.8rem, 3.5vw, 3.5rem);
+
+  font-weight: 800;
+
+  letter-spacing: -.045em;
+
+  line-height: .95;
+
+  text-align: center;
+  text-transform: uppercase;
+
+  overflow-wrap: anywhere;
+  word-break: normal;
+
+  /* TEXT CONTRAST */
+
+  color: var(--blue);
+
+  -webkit-text-stroke:
+    .5px var(--blue);
+
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, .45);
+
+  /* ANIMATION */
+
+  opacity: 0;
+
+  transform: scale(.96);
+
+  pointer-events: none;
+
+  transition:
+    opacity .3s ease,
+    transform .4s var(--ease);
+}
+
+
+/* =========================================================
+   SHOW CENTERED LABEL
+========================================================= */
+
+.project:hover .project-image::after {
+  opacity: 1;
+
+  transform: scale(1);
+}
+
+
+
+
+/* =========================================================
+   PROJECT INFORMATION
+========================================================= */
+
+.project-info {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: baseline;
+
+  gap: 20px;
+
+  font-family:
+    "Courier New",
+    Courier,
+    monospace;
+
+  font-size: .8rem;
+
+  text-transform: uppercase;
+}
+
+
+/* PROJECT TITLE */
+
+.project-title {
+  font-weight: 700;
+}
+
+
+/* PROJECT NUMBER */
+
+.project-number {
+  opacity: .65;
+}
+
 
 
     /* =========================================================
@@ -1617,18 +1695,30 @@ rainbow words */
         var(--yellow);
     }
 
-    .footer-name {
-      font-family: "navigo", sans-serif;
+  
+.footer-name {
 
-      font-size:
-        1.2rem;
+font-family:
+  "navigo",
+  sans-serif;
 
-      font-weight:
-        800;
+font-size:
+  1.4rem;
 
-      letter-spacing:
-        -.04em;
-    }
+font-weight:
+  800;
+
+letter-spacing:
+-.04em;
+
+text-transform:
+  uppercase;
+
+line-height:
+  1;
+
+}
+
 
 
     /* =========================================================
@@ -1804,9 +1894,9 @@ rainbow words */
 
   scrollbar-width: thin;
 
-  /* scrollbar-color:
+   scrollbar-color:
     rgba(23, 70, 209, .45)
-    transparent; */
+    transparent;
 }
 
 .project-view-info::-webkit-scrollbar {
@@ -3017,9 +3107,9 @@ rainbow words */
         /ɹeɪ.ə/ /ˈfriːˌbɔːrn/</p> -->
 
         <ol>
-          <li>Southwest Virginian born and raised in the Appalachia</li>
+          <li>Southwest Virginian.</li>
           <li>Graphic, 3D, and Web designer</li>
-          <li>VCUarts alumna</li>
+          <li>VCUarts alumna; B.F.A. in Graphic Design, minors in Computer Science and Media Studies.</li>
 
         </ol>
 
@@ -3103,18 +3193,18 @@ rainbow words */
     <div class="about-carousel-track">
 
       <div class="about-carousel-item">
+        <img src="images/FUN/cave.png" alt="Charcoal">
+        <span>I like to draw! This is what I'm currently working on...</span>
+      </div>
+
+      <div class="about-carousel-item">
         <img src="images/FUN/pancake.jpg" alt="Pancake Sculpture">
         <span>I like to make things...</span>
       </div>
 
       <div class="about-carousel-item">
-        <img src="images/FUN/dino.png" alt="Last Dinosaurs">
-        <span>Los Dinos is my favorite band!</span>
-      </div>
-
-      <div class="about-carousel-item">
-        <img src="images/FUN/cave.png" alt="Charcoal">
-        <span>I like to draw! This is what I'm currently working on...</span>
+        <img src="images/FUN/hiking.png" alt="Hiking">
+        <span>I like hiking</span>
       </div>
 
       <div class="about-carousel-item">
@@ -3133,8 +3223,8 @@ rainbow words */
       </div>
 
       <div class="about-carousel-item">
-        <img src="images/FUN/guitar.png" alt="Guitar">
-        <span>I like to play the guitar</span>
+        <img src="images/FUN/mountains.png" alt="Mountain">
+        <span>I like photography</span>
       </div>
 
       <div class="about-carousel-item">
@@ -3145,18 +3235,18 @@ rainbow words */
       <!-- DUPLICATE SET FOR SEAMLESS LOOP -->
 
       <div class="about-carousel-item">
+        <img src="images/FUN/cave.png" alt="Charcoal">
+        <span>I like to draw! This is what I'm currently working on...</span>
+      </div>
+
+      <div class="about-carousel-item">
         <img src="images/FUN/pancake.jpg" alt="Pancake Sculpture">
         <span>I like to make things...</span>
       </div>
 
       <div class="about-carousel-item">
-        <img src="images/FUN/dino.png" alt="Last Dinosaurs">
-        <span>Los Dinos is my favorite band!</span>
-      </div>
-
-      <div class="about-carousel-item">
-        <img src="images/FUN/cave.png" alt="Charcoal">
-        <span>I like to draw! This is what I'm currently working on...</span>
+        <img src="images/FUN/hiking.png" alt="Hiking">
+        <span>I like to hike</span>
       </div>
 
       <div class="about-carousel-item">
@@ -3175,8 +3265,8 @@ rainbow words */
       </div>
 
       <div class="about-carousel-item">
-        <img src="images/FUN/guitar.png" alt="Guitar">
-        <span>I like to play the guitar</span>
+        <img src="images/FUN/mountains.png" alt="Mountain">
+        <span>I like photography</span>
       </div>
 
       <div class="about-carousel-item">
