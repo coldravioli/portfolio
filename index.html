@@ -3053,6 +3053,244 @@ line-height:
 
 
 
+/* =========================================================
+   FIXES
+========================================================= */
+
+/* ---------- 1. Intro name too big on phones ----------
+   The name is white-space:nowrap, and at 3rem minimum it is wider than
+   a phone screen. That stretches the page, so everything looks zoomed
+   and off-center. Now it scales with the screen, and on phones it
+   wraps to two lines (RAYA / FREEBORN). */
+
+html { overflow-x: clip; }
+#main-name { max-width: 100%; }
+
+@media (max-width: 900px) {
+  :root { --name-size: 10vw; }
+  #main-name { overflow-wrap: anywhere; }
+}
+
+@media (max-width: 650px) {
+  :root { --name-size: 16vw; }
+  #main-name {
+    white-space: normal;
+    line-height: .85;
+  }
+}
+
+
+/* ---------- 2. Project view on phone / tablet ----------
+   The columns were each 100vh tall inside a container with
+   overflow:hidden, so the images (the second column) were cut off.
+   Now the whole overlay scrolls as one page. */
+
+@media (max-width: 900px) {
+
+  #project-view {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+
+    /* blur would trap the fixed close button, so use a solid yellow */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: #f8f5ae;
+  }
+
+  .project-view-inner {
+    display: block;
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .project-view-info,
+  .project-view-media {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .project-view-info {
+    min-height: 0;
+    padding-top: 90px;
+    padding-bottom: 40px;
+  }
+
+  .project-facts { padding-top: 40px; }
+  .project-description { padding-bottom: 20px; }
+
+  /* close button stays on screen while scrolling */
+  #project-close {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    width: 52px;
+    height: 52px;
+    margin: 0;
+    z-index: 600;
+    background: rgba(255, 255, 255, .8);
+    border: 1px solid rgba(23, 70, 209, .55);
+  }
+}
+
+
+/* ---------- 3. Click-to-enlarge for project images ---------- */
+
+.project-main-image { cursor: zoom-in; }
+
+#image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  background: rgba(244, 239, 93, .38);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 90px 20px;          /* equal top + bottom = truly centered */
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .45s ease, visibility 0s linear .45s;
+}
+
+#image-lightbox.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity .45s ease, visibility 0s linear 0s;
+}
+
+#lightbox-img {
+  max-width: 100%;
+  max-height: calc(100vh - 180px);
+  max-height: calc(100dvh - 180px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  box-shadow: 0 20px 70px rgba(23, 70, 209, .08);
+  transform: scale(.92);
+  transition: transform .75s var(--ease), opacity .35s ease;
+}
+
+#image-lightbox.open #lightbox-img { transform: scale(1); }
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 1px solid rgba(23, 70, 209, .55);
+  background: rgba(255, 255, 255, .3);
+  color: var(--blue);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 3;
+  transition: background .3s ease, transform .45s var(--ease);
+}
+
+.lightbox-close:hover {
+  background: var(--yellow);
+  transform: rotate(90deg) scale(1.08);
+}
+
+.lightbox-count {
+  position: absolute;
+  top: 34px;
+  right: 24px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: .72rem;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.lightbox-nav {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 18vw;
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 300;
+  transition: background .3s ease;
+}
+
+.lightbox-prev { left: 0;  justify-content: flex-start; padding-left: clamp(16px, 4vw, 60px); }
+.lightbox-next { right: 0; justify-content: flex-end;   padding-right: clamp(16px, 4vw, 60px); }
+
+.lightbox-prev:hover { background: linear-gradient(to right, rgba(244,239,93,.35), transparent); }
+.lightbox-next:hover { background: linear-gradient(to left,  rgba(244,239,93,.35), transparent); }
+
+
+/* ---------- 4. Archive viewer: centered image ----------
+   The close button (class "project-close") carries a big margin-bottom
+   of up to 160px, which pushed the image down. The close button and
+   counter are now pinned to the corners, and the image gets the whole
+   screen with equal padding top and bottom. */
+
+#archive-view { padding: 0; }
+
+.archive-view-inner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 90px 20px;
+  pointer-events: none;           /* so the side arrows stay clickable */
+}
+
+.archive-view-image-wrap {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#archive-view-image {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#archive-view-close {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  margin: 0;
+  width: 54px;
+  height: 54px;
+  font-size: 0;                   /* the X is drawn by ::before/::after */
+  pointer-events: auto;
+  z-index: 20;
+}
+
+.archive-view-number {
+  position: absolute;
+  top: 34px;
+  right: 24px;
+  padding: 0;
+}
+
   </style>
 </head>
 
@@ -4092,6 +4330,18 @@ line-height:
   >
     ↑ top
   </button>
+
+
+<!-- FULLSCREEN IMAGE LIGHTBOX -->
+<div id="image-lightbox" aria-hidden="true">
+  <button id="lightbox-close" class="lightbox-close" aria-label="Close image">✕</button>
+  <div id="lightbox-count" class="lightbox-count">01 / 01</div>
+
+  <button id="lightbox-prev" class="lightbox-nav lightbox-prev" aria-label="Previous image">←</button>
+  <button id="lightbox-next" class="lightbox-nav lightbox-next" aria-label="Next image">→</button>
+
+  <img id="lightbox-img" src="" alt="">
+</div>
 
 
   <script>
@@ -5391,99 +5641,6 @@ element.innerHTML = "";
 
 
     /* =========================================================
-       ARCHIVE VIEWER
-    ========================================================== */
-
-    document
-      .querySelectorAll(
-        ".archive-item"
-      )
-      .forEach(
-        (item, index) => {
-
-          const image =
-            item.querySelector(
-              "img"
-            );
-
-          const label =
-            item.querySelector(
-              "span"
-            );
-
-          item.addEventListener(
-            "click",
-            () => {
-
-              archiveViewImage.src =
-                image.src;
-
-              archiveViewImage.alt =
-                image.alt;
-
-              archiveViewNumber.textContent =
-                `archive / ${String(
-                  index + 1
-                ).padStart(2, "0")}`;
-
-              archiveView.classList.add(
-                "open"
-              );
-
-              archiveView.setAttribute(
-                "aria-hidden",
-                "false"
-              );
-
-              document.body.classList.add(
-                "locked"
-              );
-
-            }
-          );
-
-        }
-      );
-
-
-    function closeArchive() {
-
-      archiveView.classList.remove(
-        "open"
-      );
-
-      archiveView.setAttribute(
-        "aria-hidden",
-        "true"
-      );
-
-      /*
-        Only unlock the body if the project viewer
-        is not currently open.
-      */
-
-      if (
-        !projectView.classList.contains(
-          "open"
-        )
-      ) {
-
-        document.body.classList.remove(
-          "locked"
-        );
-
-      }
-
-    }
-
-
-    archiveViewClose.addEventListener(
-      "click",
-      closeArchive
-    );
-
-
-    /* =========================================================
        KEYBOARD
     ========================================================== */
 
@@ -5868,14 +6025,94 @@ function newColour() {
 
 
 
+/* =========================================================
+   PROJECT IMAGE LIGHTBOX
+========================================================= */
+
+const lightbox      = document.getElementById("image-lightbox");
+const lightboxImg   = document.getElementById("lightbox-img");
+const lightboxCount = document.getElementById("lightbox-count");
+const lightboxPrev  = document.getElementById("lightbox-prev");
+const lightboxNext  = document.getElementById("lightbox-next");
+const lightboxClose = document.getElementById("lightbox-close");
+
+let lightboxSources = [];
+let lightboxIndex = 0;
+
+function showLightbox(index, direction = 1) {
+  const total = lightboxSources.length;
+  lightboxIndex = (index + total) % total;
+
+  lightboxImg.style.transition = "none";
+  lightboxImg.style.opacity = "0";
+  lightboxImg.style.transform = `translateX(${direction * 25}px) scale(.96)`;
+
+  requestAnimationFrame(() => {
+    lightboxImg.src = lightboxSources[lightboxIndex];
+    lightboxCount.textContent =
+      `${String(lightboxIndex + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+
+    requestAnimationFrame(() => {
+      lightboxImg.style.transition = "";
+      lightboxImg.style.opacity = "1";
+      lightboxImg.style.transform = "scale(1)";
+    });
+  });
+}
+
+function openLightbox(index) {
+  // main image + every gallery image of the open project
+  lightboxSources = [
+    projectMainImage,
+    ...projectGallery.querySelectorAll("img")
+  ].map(img => img.src);
+
+  const multiple = lightboxSources.length > 1;
+  lightboxPrev.style.display = multiple ? "" : "none";
+  lightboxNext.style.display = multiple ? "" : "none";
+
+  showLightbox(index, 1);
+  lightbox.classList.add("open");
+  lightbox.setAttribute("aria-hidden", "false");
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("open");
+  lightbox.setAttribute("aria-hidden", "true");
+}
+
+// Works for the main image and the dynamically-created gallery images
+projectView.addEventListener("click", event => {
+  const img = event.target.closest(".project-main-image, .project-gallery img");
+  if (!img) return;
+
+  const all = [projectMainImage, ...projectGallery.querySelectorAll("img")];
+  openLightbox(Math.max(0, all.indexOf(img)));
+});
+
+lightboxPrev.addEventListener("click", e => { e.stopPropagation(); showLightbox(lightboxIndex - 1, -1); });
+lightboxNext.addEventListener("click", e => { e.stopPropagation(); showLightbox(lightboxIndex + 1,  1); });
+lightboxClose.addEventListener("click", e => { e.stopPropagation(); closeLightbox(); });
+
+// clicking the empty background closes it
+lightbox.addEventListener("click", e => {
+  if (e.target === lightbox) closeLightbox();
+});
+
+// Keyboard: runs before your existing Escape handler (capture phase)
+document.addEventListener("keydown", event => {
+  if (lightbox.classList.contains("open")) {
+    if (event.key === "Escape")     { closeLightbox(); event.stopImmediatePropagation(); }
+    if (event.key === "ArrowLeft")  { showLightbox(lightboxIndex - 1, -1); }
+    if (event.key === "ArrowRight") { showLightbox(lightboxIndex + 1,  1); }
+  } else if (archiveView.classList.contains("open")) {
+    if (event.key === "ArrowLeft")  { previousArchive(); }
+    if (event.key === "ArrowRight") { nextArchive(); }
+  }
+}, true);
+
   </script>
 
-
-<!-- FULLSCREEN IMAGE LIGHTBOX -->
-<div id="image-lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lightbox-img" src="" alt="Fullscreen Image View">
-</div>
 
 </body>
 </html>
