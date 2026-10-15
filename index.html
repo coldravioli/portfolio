@@ -778,6 +778,48 @@ rainbow words */
         -.02em;
     }
 
+    .about-contact {
+  margin: 0 0 20px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: clamp(.8rem, 1.2vw, 1.2rem) !important;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: .04em;
+}
+
+    .about-contact a {
+
+    position: relative;
+
+    color: inherit;
+    text-decoration: none;
+
+    display: inline-block;
+  }
+
+.about-contact a::after {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+
+  width: 100%;
+  height: 3px;
+
+  background: var(--yellow);
+
+  transform: scaleX(0);
+  transform-origin: left;
+
+  transition:
+    transform .35s var(--ease);
+}
+
+.about-contact a:hover::after {
+  transform: scaleX(1);
+}
+
 /* =========================================================
    ABOUT IMAGE CAROUSEL
 ========================================================= */
@@ -3150,33 +3192,21 @@ line-height:
       </h2>
 
       <p>
-        I’m a graphic designer interested in the
-        meeting point of
-        <span class="highlight">
-          education, entertainment, and exploration.
-        </span>
+        I’m a designer interested in creating work that brings together <span class="highlight">education, entertainment, and exploration.</span> Images serve as a <span class="highlight">universal language,</span> transcending cultural and linguistic barriers to communicate ideas, convey feeling, and foster connection.
       </p>
 
       <p>
-        I’m especially interested in imagery as a
-        kind of universal language. Images can carry
-        both information and feeling, sometimes
-        without relying on spoken language at all.
+        Design can transform learning into an active, experiential process, turning information into something to explore, interact with, and discover firsthand. Across <span class="highlight">print, digital design, code, 3D, and virtual reality,</span> I explore how visual systems and interaction can cultivate curiosity, encourage experimentation, and make learning more tangible.
       </p>
 
       <p>
-        My work moves between print, digital design,
-        code, 3D, and virtual reality. I like figuring
-        out how layout, color, hierarchy, movement,
-        and interaction can change the way someone
-        understands something.
+        I’m a <span class="highlight">left-and-right-brain designer</span> who thrives on a challenge, balancing creative exploration with the technical curiosity to understand how things work.      
       </p>
 
-      <p>
-        I’m a left-and-right-brain designer. I like
-        the <span class="highlight">creative</span>
-        side of design, but I also like figuring out
-        how things actually work.
+
+      <p class="about-contact">
+        Have a project in mind, or just want to say hello?
+        <a class="page.active" href="mailto:rayafreeborn@gmail.com">rayafreeborn@gmail.com</a>
       </p>
 
     </div>
